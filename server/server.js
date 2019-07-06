@@ -1,5 +1,8 @@
 require('./config/config');
 const express = require('express')
+
+const mongoose = require('mongoose');
+
 const app = express()
 var bodyParser = require('body-parser')
 
@@ -9,59 +12,17 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 const port = process.env.PORT
 
-app.get('/', (req, res) => 
+// configuracion global de rutas.
+app.use(require('./routes/index'));
 
 
-res.json('Hello World!')
 
-);
+  mongoose.connect('mongodb://localhost:27017/cafe',(err,res)=>{
+    if(err) throw err;
 
-
-app.get('/usuario', (req, res) => {
-  res.json('GET request to the usuarios');
-})
-
-
-app.post('/usuario/:id', (req, res) => {
-  let id = req.params.id;
-
-    res.json({
-      id
-    });
-  })
-
-  
-app.post('/usuario', (req, res) => {
-  let body = req.body;
-
-if(body.nombre === undefined){
-  res.status(400).json({
-    ok:false,
-    mensaje: 'El nombre es necesario'
+    console.log('Base de datos Online');
   });
-}else{
 
-    res.json({
-      body
-    });
-  }
-
-
-
-  })
-
-
-
-
-
-  app.put('/usuario', (req, res) => {
-    res.json('put usuarios');
-  })
-
-
-  app.delete('/usuario', (req, res) => {
-    res.json('delete usuarios');
-  })
 
 app.listen(port, 
 
